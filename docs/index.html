@@ -3,22 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Instalador PS3 HEN — Acceso rápido</title>
+<title>Instalador PS3 HEN — Acceso rápido y opciones</title>
 <style>
   body{background:#071018;color:#e6eef6;font-family:Helvetica,Arial,system-ui;margin:0;padding:18px}
-  .wrap{max-width:920px;margin:0 auto}
+  .wrap{max-width:980px;margin:0 auto}
   h1{font-size:20px;margin:0 0 8px}
   p.lead{color:#9aa6b2;margin:0 0 14px}
   .hero{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
   .primary{display:block;width:100%;padding:16px;border-radius:12px;background:#6dd3ff;color:#021224;text-decoration:none;text-align:center;font-weight:700;font-size:18px;margin-top:12px}
-  .secondary{display:inline-block;padding:10px 12px;border-radius:10px;background:#0f2b3a;color:#aee;text-decoration:none;margin-right:8px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  select,input[type=checkbox]{padding:8px;border-radius:8px;border:0;background:#0b2130;color:#e6eef6}
+  .small{padding:8px 10px;border-radius:8px;background:#0f2b3a;color:#aee;border:0}
   .meta{color:#9aa6b2;margin-top:8px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}
   .card{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px}
   .ver{font-weight:700}
   .checksum{font-size:12px;color:#9aa6b2;word-break:break-all}
   .hint{font-size:13px;color:#bcd}
-  button{padding:10px 12px;border-radius:10px;border:0}
+  .flex{display:flex;gap:8px;align-items:center}
+  footer{color:#8fa3b2;margin-top:12px;font-size:13px}
   @media (max-width:480px){h1{font-size:18px}.primary{font-size:16px;padding:14px}}
 </style>
 </head>
@@ -26,17 +29,25 @@
 <div class="wrap">
   <div class="hero">
     <h1>Instalador PS3 HEN — Acceso rápido</h1>
-    <p class="lead">Accede desde la PS3, detecta tu firmware y pulsa un solo botón para descargar el HEN adecuado. Comprueba el SHA256 antes de instalar.</p>
+    <p class="lead">Detecta tu firmware, elige opciones y descarga el HEN adecuado con un solo click. Recomendado: verificar SHA256 antes de instalar.</p>
 
-    <div>
-      <div class="meta">Versión detectada: <strong id="detected">—</strong></div>
-      <a id="primaryBtn" class="primary" href="#">Cargando HEN...</a>
-      <div style="margin-top:8px">
-        <a id="webInstaller" class="secondary" href="/hen/index.html" target="_blank">Abrir instalador web (hen/index.html)</a>
-        <a id="listAll" class="secondary" href="/docs/" target="_blank">Ver todos</a>
-      </div>
-      <div class="meta hint" id="status">Buscando versiones disponibles…</div>
+    <div class="controls">
+      <label class="flex">Versión detectada: <strong id="detected" style="margin-left:8px">—</strong></label>
+      <select id="fwOverride" title="Selecciona firmware (anular detección)"></select>
+      <label style="display:flex;align-items:center;gap:6px"><input id="dexToggle" type="checkbox"> Usar DEX si disponible</label>
+      <button id="refreshBtn" class="small">Detectar</button>
     </div>
+
+    <a id="primaryBtn" class="primary" href="#">Cargando HEN...</a>
+
+    <div class="controls" style="margin-top:8px">
+      <button id="verifyBtn" class="small">Verificar SHA256</button>
+      <button id="copyBtn" class="small">Copiar enlace</button>
+      <a id="releaseBtn" class="small" href="#" target="_blank">Ir a Release</a>
+      <a id="emergencyBtn" class="small" href="/hen/index.html" target="_blank">Instalador de emergencia</a>
+    </div>
+
+    <div class="meta" id="status">Buscando versiones disponibles…</div>
   </div>
 
   <section style="margin-top:14px">
@@ -47,138 +58,59 @@
   <section style="margin-top:14px">
     <h2 style="margin:6px 0">Instrucciones rápidas</h2>
     <ol style="color:#9aa6b2">
-      <li>Desde la PS3 abre esta página y usa "Detectar" (se detecta automáticamente) o mira la versión mostrada.</li>
-      <li>Pulsa el botón principal para descargar el archivo .p3t correspondiente.</li>
-      <li>Antes de ejecutar, comprueba que el SHA256 mostrado coincide con el de RELEASES.json o el asset .sha256 del Release.</li>
+      <li>Desde la PS3 abre esta página y usa Detectar o selecciona manualmente tu FW.</li>
+      <li>Pulsa el botón principal para descargar el HEN (archivo .p3t).</li>
+      <li>Pulsa "Verificar SHA256" para ver la suma y compárala con RELEASES.json o el .sha256 del Release.</li>
     </ol>
-    <div class="meta">Fecha: 2026-01-21T18:45:31Z</div>
+    <div class="meta">Fecha: 2026-01-21T18:49:25.072Z</div>
   </section>
+
+  <footer>
+    Si algo falla: limpia caché del navegador, establece la página como inicio y prueba de nuevo. Usa Issues para reportar problemas.
+  </footer>
 </div>
 
 <script>
-// Compatibilidad básica con navegadores antiguos (PS3)
 function ajaxGet(url, cb){
-  try{
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = function(){ if(xhr.readyState===4){ if(xhr.status===200) cb(null, xhr.responseText); else cb(new Error('HTTP '+xhr.status)); }};
-    xhr.send(null);
-  }catch(e){cb(e);}
+  try{var xhr=new XMLHttpRequest();xhr.open('GET',url,true);xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200)cb(null,xhr.responseText);else cb(new Error('HTTP '+xhr.status))}};xhr.send(null);}catch(e){cb(e)}
 }
+function detectFW(){var ua=navigator.userAgent||'';var fw=null;try{if(ua.indexOf('PLAYSTATION')!==-1){var i=ua.indexOf('5.0 (');var j=ua.indexOf(') Apple');if(i!==-1&&j>i)fw=ua.substring(i+19,j)}}catch(e){fw=null}return fw}
+function numeric(v){var m=(v||'').match(/\d+(?:\.\d+)?/);return m?parseFloat(m[0]):0}
+function verFromPath(p){var m=p.match(/hen\/([0-9.]+D?)\//);return m?m[1]:'general'}
 
-function detectFW(){
-  var ua = navigator.userAgent || '';
-  var fw = null;
-  try{
-    if(ua.indexOf('PLAYSTATION')!==-1){
-      var i = ua.indexOf('5.0 (');
-      var j = ua.indexOf(') Apple');
-      if(i!==-1 && j>i) fw = ua.substring(i+19,j);
-    }
-  }catch(e){fw=null;}
-  return fw;
-}
+// UI refs
+var detectedEl=document.getElementById('detected');var fwSelect=document.getElementById('fwOverride');var dexToggle=document.getElementById('dexToggle');var refreshBtn=document.getElementById('refreshBtn');var primaryBtn=document.getElementById('primaryBtn');var versionsEl=document.getElementById('versions');var statusEl=document.getElementById('status');var verifyBtn=document.getElementById('verifyBtn');var copyBtn=document.getElementById('copyBtn');var releaseBtn=document.getElementById('releaseBtn');
 
-function verKeyFromPath(p){
-  var m = p.match(/hen\/([0-9.]+D?)\//);
-  if(m) return m[1];
-  return 'general';
-}
+var detectedFW=detectFW(); if(detectedFW) detectedEl.textContent=detectedFW; else detectedEl.textContent='No PS3 detectada';
 
-function numeric(v){
-  // convert '4.82D'->4.82, drop non-digit suffix
-  var m = (v||'').match(/\d+(?:\.\d+)?/);
-  return m?parseFloat(m[0]):0;
-}
-
-function chooseBest(available, fw){
-  if(!fw) return available.length?available[0]:null;
-  // exact match
-  for(var i=0;i<available.length;i++){ if(available[i].ver===fw) return available[i]; }
-  // match by numeric <= fw, choose highest <= fw
-  var target = numeric(fw), best=null;
-  for(i=0;i<available.length;i++){ var n = numeric(available[i].ver); if(n<=target){ if(!best || numeric(best.ver)<n) best=available[i]; }}
-  if(best) return best;
-  // fallback newest (highest numeric)
-  var newest=available[0]; for(i=1;i<available.length;i++){ if(numeric(available[i].ver)>numeric(newest.ver)) newest=available[i]; }
-  return newest;
-}
-
-function renderVersions(list, releaseMap){
-  var container = document.getElementById('versions'); container.innerHTML='';
-  for(var i=0;i<list.length;i++){
-    var it = list[i];
-    var card = document.createElement('div'); card.className='card';
-    var v = document.createElement('div'); v.className='ver'; v.textContent = 'Versión ' + it.ver;
-    var btn = document.createElement('a'); btn.className='primary'; btn.href = it.path; btn.textContent = 'Descargar HEN (' + it.ver + ')'; btn.target='_blank';
-    btn.style.padding='10px'; btn.style.fontSize='14px'; btn.style.display='block'; btn.style.marginTop='8px';
-    var chk = document.createElement('div'); chk.className='checksum'; chk.textContent = 'SHA256: ' + (releaseMap[it.path] || '—');
-    card.appendChild(v); card.appendChild(chk); card.appendChild(btn);
-    container.appendChild(card);
-  }
-}
-
-// Main
-var detected = detectFW();
-if(detected) document.getElementById('detected').textContent = detected; else document.getElementById('detected').textContent = 'No PS3 detectada';
-
-// Load RELEASES.json to find files and checksums
+// Load RELEASES.json
 ajaxGet('/RELEASES.json', function(err, txt){
-  var statusEl = document.getElementById('status');
-  if(err){ statusEl.textContent = 'No se pudo leer RELEASES.json: mostrando lista estática.'; buildStatic(); return; }
+  if(err){ statusEl.textContent='No se pudo leer RELEASES.json. Cargando lista estática.'; buildStatic(); return }
   try{
-    var data = JSON.parse(txt);
-    var files = data.files || [];
-    var map = {};
-    var versions = {};
-    for(var i=0;i<files.length;i++){
-      var p = files[i].path;
-      var sha = files[i].sha256 || files[i].sha || '';
-      map[p] = sha;
-      if(/PS3HEN\.p3t$/.test(p)){
-        var ver = verKeyFromPath(p);
-        if(!versions[ver]) versions[ver]=[];
-        versions[ver].push({ver:ver,path:'/'+p});
-      }
-    }
-    // flatten
-    var list = [];
-    for(var k in versions){
-      // pick first for each ver
-      list.push(versions[k][0]);
-    }
-    // sort by numeric desc
-    list.sort(function(a,b){return numeric(b.ver)-numeric(a.ver);});
-
-    // choose best
-    var best = chooseBest(list, detected);
-    if(best){
-      var primary = document.getElementById('primaryBtn');
-      primary.href = best.path;
-      primary.textContent = 'Instalar HEN para ' + best.ver + ' — Descargar';
-      document.getElementById('status').textContent = 'Se ha seleccionado automáticamente la versión más adecuada: ' + best.ver;
-      // show checksum near button
-      var cs = map[best.path] || map[best.path.substring(1)];
-      if(cs){
-        var s = document.createElement('div'); s.className='meta checksum'; s.textContent = 'SHA256: ' + cs; s.style.marginTop='6px';
-        primary.parentNode.insertBefore(s, primary.nextSibling);
-      }
-    }
-    renderVersions(list, map);
-  }catch(e){ statusEl.textContent = 'ERROR al parsear RELEASES.json'; buildStatic(); }
+    var data=JSON.parse(txt);var files=data.files||[];var map={};var versions={};
+    files.forEach(function(f){map['/'+f.path]=f.sha256||f.sha; if(/PS3HEN\.p3t$/.test(f.path)){var v=verFromPath(f.path); if(!versions[v])versions[v]=[]; versions[v].push({ver:v,path:'/'+f.path,sha:f.sha256||f.sha||''})}});
+    var list=[];for(var k in versions){list.push(versions[k][0])}
+    list.sort(function(a,b){return numeric(b.ver)-numeric(a.ver)});
+    populateFWSelect(list);
+    renderVersions(list,map);
+    selectBest(list);
+  }catch(e){statusEl.textContent='Error al procesar RELEASES.json'; buildStatic()}
 });
 
-function buildStatic(){
-  // fallback static list from files present
-  var staticList = [
-    {ver:'4.91', path:'/hen/4.91/PS3HEN.p3t'},
-    {ver:'4.90', path:'/hen/4.90/PS3HEN.p3t'},
-    {ver:'4.89', path:'/hen/4.89/PS3HEN.p3t'},
-    {ver:'4.88', path:'/hen/4.88/PS3HEN.p3t'}
-  ];
-  renderVersions(staticList, {});
-  document.getElementById('status').textContent = 'Lista estática cargada.';
-}
+function populateFWSelect(list){fwSelect.innerHTML='';var seen={};var vals=[];list.forEach(function(it){var n=it.ver.replace('D','');if(!seen[n]){seen[n]=true;vals.push(n)}});vals.sort(function(a,b){return numeric(b)-numeric(a)});var opt=document.createElement('option');opt.value='';opt.textContent='(Usar detección automática)';fwSelect.appendChild(opt);vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;fwSelect.appendChild(o)})}
+
+function renderVersions(list,map){versionsEl.innerHTML='';list.forEach(function(it){var card=document.createElement('div');card.className='card';var v=document.createElement('div');v.className='ver';v.textContent='Versión '+it.ver;var chk=document.createElement('div');chk.className='checksum';chk.textContent='SHA256: '+(map[it.path]||it.sha||'—');var dl=document.createElement('a');dl.className='primary';dl.href=it.path;dl.target='_blank';dl.textContent='Descargar HEN ('+it.ver+')';dl.style.fontSize='14px';dl.style.padding='10px';card.appendChild(v);card.appendChild(chk);card.appendChild(dl);versionsEl.appendChild(card)})}
+
+function selectBest(list){var prefer=fwSelect.value||detectedFW;var dex=dexToggle.checked;var candidates=list.slice();if(prefer){candidates=candidates.filter(function(x){if(dex){return x.ver.indexOf(prefer)!==-1||x.ver.indexOf(prefer+'D')!==-1}else{return x.ver.indexOf(prefer)!==-1}})}if(candidates.length===0)candidates=list.slice();candidates.sort(function(a,b){return numeric(b.ver)-numeric(a.ver)});var best=candidates[0];if(best){primaryBtn.href=best.path;primaryBtn.textContent='Instalar HEN para '+best.ver+' — Descargar';statusEl.textContent='Seleccionada: '+best.ver;releaseBtn.href='https://github.com/PS3Xploit/PS3HEN/releases';primaryBtn.dataset.sha=best.sha||''}else{primaryBtn.href='#';primaryBtn.textContent='No hay HEN disponible';statusEl.textContent='No se encontró HEN'} }
+
+// events
+refreshBtn.addEventListener('click', function(){detectedFW=detectFW();detectedEl.textContent=detectedFW||'Manual';selectBestFromUI()});fwSelect.addEventListener('change', selectBestFromUI);dexToggle.addEventListener('change', selectBestFromUI);
+function selectBestFromUI(){ajaxGet('/RELEASES.json', function(err, txt){if(err){statusEl.textContent='No se pudo actualizar';return} try{var data=JSON.parse(txt);var files=data.files||[];var list=[];files.forEach(function(f){if(/PS3HEN\.p3t$/.test(f.path)){list.push({ver:verFromPath('/'+f.path),path:'/'+f.path,sha:f.sha256||f.sha||''})}});list.sort(function(a,b){return numeric(b.ver)-numeric(a.ver)});selectBest(list)}catch(e){statusEl.textContent='Error al actualizar'}})}
+
+verifyBtn.addEventListener('click', function(){var sha=primaryBtn.dataset.sha;if(!sha){alert('No available checksum para el archivo seleccionado. Comprueba RELEASES.json o el Release.');return} prompt('SHA256 (copiar para verificar):', sha)});
+copyBtn.addEventListener('click', function(){var url=location.origin+primaryBtn.getAttribute('href');try{navigator.clipboard.writeText(url).then(function(){alert('Enlace copiado')}, function(){prompt('Copiar enlace manualmente:', url)})}catch(e){prompt('Copiar enlace manualmente:', url)}});
+
+function buildStatic(){var staticList=[{ver:'4.91',path:'/hen/4.91/PS3HEN.p3t'},{ver:'4.90',path:'/hen/4.90/PS3HEN.p3t'},{ver:'4.89',path:'/hen/4.89/PS3HEN.p3t'},{ver:'4.88',path:'/hen/4.88/PS3HEN.p3t'}];populateFWSelect(staticList);renderVersions(staticList,{});selectBest(staticList);statusEl.textContent='Lista estática cargada.'}
 
 </script>
 </body>
