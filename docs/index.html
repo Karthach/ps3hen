@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PS3 HEN - Gestión</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
+    input{padding:8px;width:100%;max-width:480px;margin-bottom:12px}
+    .list{margin-top:12px}
+    .item{padding:10px;border:1px solid #ddd;border-radius:6px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
+    .meta{font-size:0.9rem;color:#444}
+    .actions a{margin-left:8px}
+  </style>
+</head>
+<body>
+  <h1>PS3 HEN — Sitio de gestión (estático)</h1>
+  <p>Sitio estático para listar y acceder a los HEN disponibles en este repositorio. Publicar en GitHub Pages desde la carpeta <strong>/docs</strong>.</p>
+
+  <input id="q" placeholder="Filtrar por versión o nombre (ej. 4.88)" autofocus>
+
+  <section>
+    <h2>HEN disponibles</h2>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section style="margin-top:28px">
+    <h2>Páginas y versiones</h2>
+    <ul>
+      <li><a href="/hen/index.html">hen/index.html</a></li>
+      <li><a href="/hen/ps3hen_v100.js">hen/ps3hen_v100.js</a></li>
+      <li><a href="/4.88/index.html">/4.88/</a></li>
+      <li><a href="/4.89/index.html">/4.89/</a></li>
+      <li><a href="/4.90/index.html">/4.90/</a></li>
+      <li><a href="/4.91/index.html">/4.91/</a></li>
+      <li><a href="/4.92/index.html">/4.92/</a></li>
+    </ul>
+  </section>
+
+<script>
+// Lista generada a partir del contenido actual del repositorio
+const items = [
+  {name: 'hen/ps3hen_v100.js', path: '/hen/ps3hen_v100.js', type: 'script'},
+  {name: 'hen/index.html', path: '/hen/index.html', type: 'page'},
+  {name: 'hen/4.80/PS3HEN.p3t', path: '/hen/4.80/PS3HEN.p3t'},
+  {name: 'hen/4.81/PS3HEN.p3t', path: '/hen/4.81/PS3HEN.p3t'},
+  {name: 'hen/4.82/PS3HEN.p3t', path: '/hen/4.82/PS3HEN.p3t'},
+  {name: 'hen/4.82D/PS3HEN.p3t', path: '/hen/4.82D/PS3HEN.p3t'},
+  {name: 'hen/4.83/PS3HEN.p3t', path: '/hen/4.83/PS3HEN.p3t'},
+  {name: 'hen/4.84/PS3HEN.p3t', path: '/hen/4.84/PS3HEN.p3t'},
+  {name: 'hen/4.84D/PS3HEN.p3t', path: '/hen/4.84D/PS3HEN.p3t'},
+  {name: 'hen/4.85/PS3HEN.p3t', path: '/hen/4.85/PS3HEN.p3t'},
+  {name: 'hen/4.86/PS3HEN.p3t', path: '/hen/4.86/PS3HEN.p3t'},
+  {name: 'hen/4.87/PS3HEN.p3t', path: '/hen/4.87/PS3HEN.p3t'},
+  {name: 'hen/4.88/PS3HEN.p3t', path: '/hen/4.88/PS3HEN.p3t'},
+  {name: 'hen/4.89/PS3HEN.p3t', path: '/hen/4.89/PS3HEN.p3t'},
+  {name: 'hen/4.90/PS3HEN.p3t', path: '/hen/4.90/PS3HEN.p3t'},
+  {name: 'hen/4.91/PS3HEN.p3t', path: '/hen/4.91/PS3HEN.p3t'}
+];
+
+const listEl = document.getElementById('list');
+function render(filter=''){
+  listEl.innerHTML='';
+  const f = filter.trim().toLowerCase();
+  items.filter(it => !f || it.name.toLowerCase().includes(f)).forEach(it =>{
+    const div = document.createElement('div'); div.className='item';
+    const left = document.createElement('div'); left.innerHTML = `<strong>${it.name}</strong><div class="meta">${it.type||'archivo'}</div>`;
+    const actions = document.createElement('div'); actions.className='actions';
+    const a = document.createElement('a'); a.href = it.path; a.textContent='Descargar / Abrir'; a.target='_blank';
+    const raw = document.createElement('a'); raw.href = it.path; raw.textContent=' Enlace'; raw.target='_blank';
+    actions.appendChild(a); actions.appendChild(raw);
+    div.appendChild(left); div.appendChild(actions);
+    listEl.appendChild(div);
+  });
+}
+
+document.getElementById('q').addEventListener('input', e=> render(e.target.value));
+render();
+</script>
+</body>
+</html>
