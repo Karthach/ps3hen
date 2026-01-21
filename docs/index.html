@@ -3,46 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Instalador PS3 HEN — Centro (Reparado)</title>
-<style>body{background:#071018;color:#e6eef6;font-family:Helvetica,Arial;margin:0;padding:18px}.wrap{max-width:1100px;margin:0 auto}.card{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px}.meta{color:#9aa6b2}</style>
+<title>PS3 HEN — Panel avanzado</title>
+<style>
+  :root{--bg:#071018;--card:#0f1724;--muted:#9aa6b2;--accent:#6dd3ff;--ok:#7fd18a;--danger:#ff8a8a}
+  body{background:linear-gradient(180deg,var(--bg),#061218);color:#e6eef6;font-family:Helvetica,Arial,system-ui;margin:0;padding:18px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{display:flex;align-items:center;gap:12px}
+  h1{margin:0;font-size:20px}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;margin-top:14px}
+  .card{background:var(--card);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .row{display:flex;gap:8px;align-items:center}
+  select,input,button{padding:10px;border-radius:8px;border:0;background:#071b29;color:#e6eef6}
+  button{cursor:pointer}
+  .primary{background:var(--accent);color:#021224;padding:12px;border-radius:10px;text-decoration:none;font-weight:700}
+  .small{background:#0f2b3a;padding:8px;border-radius:8px;color:#aee;border:0}
+  .meta{color:var(--muted);font-size:13px;margin-top:8px}
+  .section-title{font-size:16px;margin-bottom:8px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .danger{background:var(--danger);color:#400}
+  footer{color:var(--muted);margin-top:12px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Instalador PS3 HEN</h1>
-  <div id="status" class="meta">Estado: inicializando...</div>
-  <div class="card" style="margin-top:12px">
-    <label>Selecciona versión:</label>
-    <select id="verSelect"></select>
-    <div style="margin-top:8px">
-      <a id="downloadBtn" href="#">Descargar</a>
-      <button id="verifyBtn">Verificar SHA256</button>
-      <button id="copyBtn">Copiar enlace</button>
+  <header>
+    <img src="/hen/icon-ps3.svg" width="56" height="56" alt="PS3" style="border-radius:10px;background:#061018">
+    <div>
+      <h1>PS3 HEN — Panel avanzado</h1>
+      <div class="meta">Automático y visual — detecta consola, gestiona HEN, reinstala, limpia y muestra opciones avanzadas.</div>
     </div>
-    <div id="fileSha" class="meta">SHA256: —</div>
+  </header>
+
+  <div class="grid">
+    <main>
+      <div class="card">
+        <div class="section-title">Selector de versión</div>
+        <div class="row">
+          <select id="verSelect"></select>
+          <button id="detectBtn" class="small">Detectar</button>
+          <button id="autoBtn" class="small">Seleccionar automático</button>
+        </div>
+        <div class="meta" id="fileSha">SHA256: —</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Estado de la consola</div>
+        <div id="detectedInfo" class="meta">Detectando...</div>
+        <div style="margin-top:8px" class="actions">
+          <button id="checkInstalled" class="small">Comprobar si HEN está instalado</button>
+          <button id="uninstallBtn" class="small danger">Desinstalar HEN</button>
+          <button id="cleanBtn" class="small danger">Eliminar y limpiar</button>
+        </div>
+        <div class="meta">Nota: algunas acciones solo funcionan ejecutando el instalador desde la consola.</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Instalación / Acción rápida</div>
+        <div class="row">
+          <a id="downloadBtn" class="primary" href="#">Descargar e instalar (selección)</a>
+        </div>
+        <div class="actions" style="margin-top:8px">
+          <button id="verifyBtn" class="small">Verificar SHA256</button>
+          <button id="copyBtn" class="small">Copiar enlace</button>
+          <a id="versionPage" class="small" href="#" target="_blank">Abrir página versión</a>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Herramientas avanzadas</div>
+        <div class="actions">
+          <button id="backupBtn" class="small">Backup configuración</button>
+          <button id="restoreBtn" class="small">Restaurar configuración</button>
+          <button id="toggleHotkeys" class="small">Toggle Hotkeys</button>
+          <button id="toggleRemap" class="small">Toggle Remap</button>
+        </div>
+        <div class="meta" style="margin-top:8px">Estas acciones reflejan opciones comunes en PS3HEN (requieren ejecución desde HEN o privilegios).</div>
+      </div>
+    </main>
+
+    <aside>
+      <div class="card">
+        <div class="section-title">Resumen y compatibilidad</div>
+        <div id="compatInfo" class="meta">Cargando...</div>
+        <div style="margin-top:8px" class="meta">Última actualización: <span id="updatedAt">—</span></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="section-title">Accesos rápidos</div>
+        <div class="actions">
+          <a href="/hen/index.html" class="small" target="_blank">Instalador web</a>
+          <a href="https://github.com/PS3Xploit/PS3HEN/releases" class="small" target="_blank">Releases oficiales</a>
+          <a href="/RELEASES.json" class="small" target="_blank">Ver RELEASES.json</a>
+        </div>
+      </div>
+
+    </aside>
   </div>
-  <div class="card" style="margin-top:12px">
-    <h3>Detalles</h3>
-    <div id="detector" class="meta">Detectando...</div>
-  </div>
+
+  <footer>
+    <div class="meta">Repositorio origen: PS3Xploit/PS3HEN · Fecha: 2026-01-21T19:23:43.422Z</div>
+  </footer>
 </div>
 
 <script>
-function ajax(url, cb, responseType){try{var x=new XMLHttpRequest();x.open('GET',url,true);if(responseType)x.responseType=responseType;x.onreadystatechange=function(){if(x.readyState===4){if(x.status===200)cb(null,x);else cb(new Error('HTTP '+x.status))}};x.send(null);}catch(e){cb(e)}}
-var statusEl=document.getElementById('status');var sel=document.getElementById('verSelect');var fileSha=document.getElementById('fileSha');var downloadBtn=document.getElementById('downloadBtn');var verifyBtn=document.getElementById('verifyBtn');var copyBtn=document.getElementById('copyBtn');
+function ajax(url,cb,rt){try{var x=new XMLHttpRequest();x.open('GET',url,true);if(rt)x.responseType=rt;x.onreadystatechange=function(){if(x.readyState===4){if(x.status===200)cb(null,x);else cb(new Error('HTTP '+x.status))}};x.send(null)}catch(e){cb(e)}}
+function numeric(v){var m=(v||'').match(/\d+(?:\.\d+)?/);return m?parseFloat(m[0]):0}
+function verFromPath(p){var m=p.match(/hen\/([0-9.]+D?)\//);return m?m[1]:'general'}
 
-function loadReleases(cb){statusEl.textContent='Estado: cargando /RELEASES.json'; ajax('/RELEASES.json', function(err,x){ if(!err){ try{var d=JSON.parse(x.responseText);statusEl.textContent='Estado: RELEASES.json cargado desde raíz'; cb(null,d); return}catch(e){statusEl.textContent='ERROR parseando /RELEASES.json: '+e.message} } // fallback to raw github
- statusEl.textContent+='; intentando fallback raw.githubusercontent...'; var raw='https://raw.githubusercontent.com/Karthach/ps3hen/main/RELEASES.json'; ajax(raw,function(err2,x2){ if(!err2){ try{var d2=JSON.parse(x2.responseText); statusEl.textContent='Estado: RELEASES.json cargado desde raw.githubusercontent'; cb(null,d2); return;}catch(e){statusEl.textContent='ERROR parseando raw: '+e.message} } cb(new Error('No se pudo cargar RELEASES.json')) },'text') },'text')}
+var verSelect=document.getElementById('verSelect');var fileSha=document.getElementById('fileSha');var downloadBtn=document.getElementById('downloadBtn');var versionPage=document.getElementById('versionPage');var compatInfo=document.getElementById('compatInfo');var updatedAt=document.getElementById('updatedAt');
+var detectBtn=document.getElementById('detectBtn');var autoBtn=document.getElementById('autoBtn');
 
-function buildUI(data){var files=data.files||[];var byVer={};files.forEach(function(f){ if(f.path.indexOf('hen/')===0 && f.path.endsWith('.p3t')){var ver=f.path.match(/hen\/(\d+[\.\d]*D?)\//); var v=ver?ver[1]:'general'; if(!byVer[v]) byVer[v]=[]; byVer[v].push({path:'/'+f.path,sha:f.sha256}); }}); var vers=Object.keys(byVer).sort(function(a,b){return parseFloat(b)-parseFloat(a)}); if(vers.length===0){statusEl.textContent='No se encontraron .p3t en RELEASES.json'; return} sel.innerHTML=''; vers.forEach(function(v){ var o=document.createElement('option'); o.value=v; o.textContent=v; sel.appendChild(o); }); sel.addEventListener('change', function(){select(ver=sel.value,byVer)}); select(ver=sel.value,byVer);}
+var releaseData=null; var byVer={};
 
-function select(ver,byVer){ var arr=byVer[ver]||[]; if(arr.length===0){downloadBtn.href='#'; fileSha.textContent='SHA256: —'; return} var it=arr[0]; downloadBtn.href=it.path; fileSha.textContent='SHA256: '+(it.sha||'—'); verifyBtn.onclick=function(){verify(it)}; copyBtn.onclick=function(){navigator.clipboard && navigator.clipboard.writeText(location.origin+it.path).then(function(){alert('Enlace copiado')}, function(){prompt('Enlace:',location.origin+it.path)})}}
+function loadReleases(){ajax('/RELEASES.json',function(err,x){if(err){compatInfo.textContent='No se pudo cargar RELEASES.json';return}try{var d=JSON.parse(x.responseText);releaseData=d;updatedAt.textContent=d.generated_at||'—';buildVersions(d)}catch(e){compatInfo.textContent='Error parseando RELEASES.json'}},'text')}
 
-function verify(it){ ajax(it.path,function(err,x){ if(err){ alert('error download: '+err.message); return } var ab = x.response || x.responseText; if(typeof ab === 'string'){ var bin=''; for(var i=0;i<ab.length;i++){bin+=String.fromCharCode(ab.charCodeAt(i)&0xff)} var buf=new Uint8Array(bin.length); for(i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i)&0xff; doHash(buf.buffer,it.sha); } else { doHash(ab,it.sha) } },'arraybuffer') }
+function buildVersions(data){var files=data.files||[];byVer={};files.forEach(function(f){if(f.path.indexOf('hen/')===0 && f.path.endsWith('.p3t')){var v=verFromPath(f.path);if(!byVer[v])byVer[v]=[];byVer[v].push({path:'/'+f.path,sha:f.sha256||f.sha})}});var vers=Object.keys(byVer).sort(function(a,b){return numeric(b)-numeric(a)});verSelect.innerHTML='';vers.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;verSelect.appendChild(o)});if(vers.length>0){selectVersion(vers[0]);} compatInfo.textContent='Versiones cargadas: '+vers.join(', ')}
 
-function toHex(buf){ var a=new Uint8Array(buf),h=''; for(var i=0;i<a.length;i++)h+=('00'+a[i].toString(16)).slice(-2); return h }
-function doHash(ab,expected){ if(!window.crypto||!crypto.subtle){alert('Web Crypto no disponible');return} crypto.subtle.digest('SHA-256',ab).then(function(h){ var hh=toHex(h); alert('SHA: '+hh+'\nEsperado: '+expected); }) }
+function selectVersion(v){var arr=byVer[v]||[];if(arr.length===0){downloadBtn.href='#';fileSha.textContent='SHA256: —';versionPage.href='#';return}var it=arr[0];downloadBtn.href=it.path;fileSha.textContent='SHA256: '+(it.sha||'—');versionPage.href='/'+v+'/index.html'}
 
-loadReleases(function(err,data){ if(err){statusEl.textContent='Fallo cargando RELEASES.json'; return} buildUI(data) })
+verSelect.addEventListener('change',function(){selectVersion(verSelect.value)});
+autoBtn.addEventListener('click',function(){autoSelect()});
+detectBtn.addEventListener('click',function(){autoDetect()});
+
+// detection
+function autoDetect(){var ua=navigator.userAgent||'';var fw='No detectada';try{if(ua.indexOf('PLAYSTATION')!==-1){var i=ua.indexOf('5.0 (');var j=ua.indexOf(') Apple');if(i!==-1&&j>i)fw=ua.substring(i+19,j)}}catch(e){}document.getElementById('detectedInfo').textContent='UA: '+ua+'\nFW: '+fw; // pick best
+var fnum=(fw.match(/\d+(?:\.\d+)?/)||[])[0]; if(fnum && byVer[fnum]){verSelect.value=fnum; selectVersion(fnum);} }
+
+function autoSelect(){ // pick newest compatible
+var keys=Object.keys(byVer).sort(function(a,b){return numeric(b)-numeric(a)}); if(keys.length) {verSelect.value=keys[0]; selectVersion(keys[0])}}
+
+// actions (high-level; these perform UI-only operations as the real install/uninstall must run on PS3)
+document.getElementById('checkInstalled').addEventListener('click',function(){alert('Comprobación: desde la web solo se puede estimar. Comprueba desde la consola si HEN está activo (syscall).')});
+
+document.getElementById('uninstallBtn').addEventListener('click',function(){if(confirm('Desinstalar HEN en la consola? Asegúrate de hacer backup.')) alert('Instrucciones: usa el instalador de emergencia o elimina los archivos HEN desde dev_hdd0 en la consola.');});
+
+document.getElementById('cleanBtn').addEventListener('click',function(){if(confirm('Eliminar HEN y remap/archivos?')) alert('Instrucciones de limpieza: borra dev_hdd0/hen y remueve plugins relacionados.');});
+
+// verify / copy
+document.getElementById('verifyBtn').addEventListener('click',function(){var path=downloadBtn.getAttribute('href'); if(!path||path==='#'){alert('Selecciona una versión');return} ajax(path,function(err,x){ if(err){alert('Error descargando: '+err.message);return} var buf=x.response||x.responseText; if(typeof buf==='string'){var bin=''; for(var i=0;i<buf.length;i++) bin+=String.fromCharCode(buf.charCodeAt(i)&0xff); var u=new Uint8Array(bin.length); for(i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i)&0xff; doHash(u.buffer, (byVer[verSelect.value][0]||{}).sha)} else { doHash(buf,(byVer[verSelect.value][0]||{}).sha) } },'arraybuffer')});
+
+document.getElementById('copyBtn').addEventListener('click',function(){var path=downloadBtn.getAttribute('href'); if(!path||path==='#'){alert('Selecciona una versión');return} navigator.clipboard && navigator.clipboard.writeText(location.origin+path).then(function(){alert('Enlace copiado')},function(){prompt('Copiar enlace:',location.origin+path)})});
+
+function doHash(ab,expected){if(!window.crypto||!crypto.subtle){alert('Web Crypto no disponible');return}crypto.subtle.digest('SHA-256',ab).then(function(h){var hex='';var a=new Uint8Array(h);for(var i=0;i<a.length;i++)hex+=('00'+a[i].toString(16)).slice(-2); if(expected && hex===expected) alert('SHA OK: '+hex); else alert('SHA mismatch\nCalculado: '+hex+'\nEsperado: '+(expected||'—'))})}
+
+// tools (UI helpers)
+document.getElementById('backupBtn').addEventListener('click',function(){alert('Backup: descarga configuraciones desde dev_hdd0 en la consola o usa herramientas HFW.')});
+document.getElementById('restoreBtn').addEventListener('click',function(){alert('Restore: sube paquete de restauración y usa instalador HEN en la consola.')});
+document.getElementById('toggleHotkeys').addEventListener('click',function(){alert('Toggle Hotkeys: interfaz para activar/desactivar polling de teclas (desde HEN).')});
+document.getElementById('toggleRemap').addEventListener('click',function(){alert('Toggle remap: habilita/deshabilita remapeo de rutas (necesita HEN).')});
+
+loadReleases();
 </script>
 </body>
 </html>
