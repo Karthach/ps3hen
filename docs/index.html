@@ -6,42 +6,47 @@
   <title>PS3 HEN - Gestión</title>
   <style>
     body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:24px;color:#111}
-    input{padding:8px;width:100%;max-width:480px;margin-bottom:12px}
+    input, select, button{padding:8px;margin:6px 4px}
     .list{margin-top:12px}
     .item{padding:10px;border:1px solid #ddd;border-radius:6px;margin:8px 0;display:flex;justify-content:space-between;align-items:center}
     .meta{font-size:0.9rem;color:#444}
-    .actions a{margin-left:8px}
+    .actions a, .actions button{margin-left:8px}
+    .badge{display:inline-block;padding:3px 8px;border-radius:12px;background:#eef;border:1px solid #cce;margin-left:8px}
+    .ok{background:#e6ffea;border-color:#7fd18a}
+    .warn{background:#fff4e5;border-color:#ffc36b}
+    .danger{background:#ffecec;border-color:#ff8a8a}
+    pre{background:#f7f7f7;padding:8px;border-radius:6px}
   </style>
 </head>
 <body>
-  <h1>PS3 HEN — Sitio de gestión (estático)</h1>
-  <p>Sitio estático para listar y acceder a los HEN disponibles en este repositorio. Publicar en GitHub Pages desde la carpeta <strong>/docs</strong>.</p>
+  <h1>PS3 HEN — Panel de gestión</h1>
+  <p>Esta página detecta la consola/firmware (si se carga desde la PS3) y muestra HENs disponibles, compatibilidad y acciones.</p>
 
-  <input id="q" placeholder="Filtrar por versión o nombre (ej. 4.88)" autofocus>
+  <div>
+    <input id="q" placeholder="Filtrar por versión o nombre (ej. 4.88)" style="width:320px">
+    <button id="detectBtn">Detectar desde userAgent</button>
+    <label>Versión detectada: <span id="detected">—</span></label>
+  </div>
 
   <section>
     <h2>HEN disponibles</h2>
     <div class="list" id="list"></div>
   </section>
 
-  <section style="margin-top:28px">
-    <h2>Páginas y versiones</h2>
+  <section style="margin-top:18px">
+    <h2>Páginas y utilidades</h2>
     <ul>
-      <li><a href="/hen/index.html">hen/index.html</a></li>
-      <li><a href="/hen/ps3hen_v100.js">hen/ps3hen_v100.js</a></li>
-      <li><a href="/4.88/index.html">/4.88/</a></li>
-      <li><a href="/4.89/index.html">/4.89/</a></li>
-      <li><a href="/4.90/index.html">/4.90/</a></li>
-      <li><a href="/4.91/index.html">/4.91/</a></li>
-      <li><a href="/4.92/index.html">/4.92/</a></li>
+      <li><a href="/hen/index.html">Instalador HEN (hen/index.html)</a></li>
+      <li><a href="/hen/ps3hen_v100.js">Script ps3hen_v100.js (referencia)</a></li>
+      <li><a href="/4.88/index.html">Página instalador 4.88</a> (y hay páginas para 4.90–4.92)</li>
     </ul>
   </section>
 
 <script>
-// Lista generada a partir del contenido actual del repositorio
+// Inventario generado a partir del repositorio
 const items = [
-  {name: 'hen/ps3hen_v100.js', path: '/hen/ps3hen_v100.js', type: 'script'},
-  {name: 'hen/index.html', path: '/hen/index.html', type: 'page'},
+  {name: 'hen/ps3hen_v100.js', path: '/hen/ps3hen_v100.js', kind: 'script'},
+  {name: 'hen/index.html', path: '/hen/index.html', kind: 'installer'},
   {name: 'hen/4.80/PS3HEN.p3t', path: '/hen/4.80/PS3HEN.p3t'},
   {name: 'hen/4.81/PS3HEN.p3t', path: '/hen/4.81/PS3HEN.p3t'},
   {name: 'hen/4.82/PS3HEN.p3t', path: '/hen/4.82/PS3HEN.p3t'},
@@ -58,24 +63,97 @@ const items = [
   {name: 'hen/4.91/PS3HEN.p3t', path: '/hen/4.91/PS3HEN.p3t'}
 ];
 
-const listEl = document.getElementById('list');
+// Supported firmware list (copied from ps3hen_v100.js fwCompat array)
+const fwCompat = ["4.00","4.10","4.11","4.20","4.21","4.25","4.30","4.31","4.40","4.41","4.45","4.46","4.50","4.53","4.55","4.60","4.65","4.66","4.70","4.75","4.76","4.78","4.80","4.81","4.82","4.83","4.84","4.85","4.86","4.87","4.88","4.89","4.90","4.91"];
+
+function versionFromPath(p){
+  const m = p.match(/hen\/([0-9.]+D?)\//);
+  return m?m[1]:'-';
+}
+
+function kindFromPath(p){
+  if(p.endsWith('.js')) return 'script';
+  if(p.endsWith('.p3t')) return 'hen';
+  if(p.endsWith('.html')) return 'page';
+  return 'file';
+}
+
 function render(filter=''){
+  const listEl = document.getElementById('list');
   listEl.innerHTML='';
-  const f = filter.trim().toLowerCase();
-  items.filter(it => !f || it.name.toLowerCase().includes(f)).forEach(it =>{
-    const div = document.createElement('div'); div.className='item';
-    const left = document.createElement('div'); left.innerHTML = `<strong>${it.name}</strong><div class="meta">${it.type||'archivo'}</div>`;
+  const q = filter.trim().toLowerCase();
+  items.filter(it => !q || it.name.toLowerCase().includes(q) || versionFromPath(it.path).toLowerCase().includes(q)).forEach(it => {
+    const ver = versionFromPath(it.path);
+    const itemEl = document.createElement('div'); itemEl.className='item';
+    const left = document.createElement('div');
+    left.innerHTML = `<strong>${it.name}</strong><div class="meta">Tipo: ${it.kind||kindFromPath(it.path)} — Versión: ${ver}</div>`;
     const actions = document.createElement('div'); actions.className='actions';
-    const a = document.createElement('a'); a.href = it.path; a.textContent='Descargar / Abrir'; a.target='_blank';
-    const raw = document.createElement('a'); raw.href = it.path; raw.textContent=' Enlace'; raw.target='_blank';
-    actions.appendChild(a); actions.appendChild(raw);
-    div.appendChild(left); div.appendChild(actions);
-    listEl.appendChild(div);
+    const a = document.createElement('a'); a.href = it.path; a.textContent='Abrir/Descargar'; a.target='_blank';
+    actions.appendChild(a);
+    // Version page if exists
+    const pageVer = it.path.match(/hen\/(\d[0-9.]*D?)\//);
+    if(pageVer){
+      const verOnly = pageVer[1].replace('D','');
+      const pageLink = `/` + verOnly + '/index.html';
+      const p = document.createElement('a'); p.href = pageLink; p.textContent=' Página versión'; p.target='_blank'; p.style.marginLeft='8px';
+      actions.appendChild(p);
+    }
+    // copy link button
+    const copyBtn = document.createElement('button'); copyBtn.textContent='Copiar enlace'; copyBtn.onclick = ()=> navigator.clipboard && navigator.clipboard.writeText(location.origin + it.path).then(()=>alert('Enlace copiado'));
+    actions.appendChild(copyBtn);
+
+    // compatibility badge
+    const userFw = detectedFw || null;
+    const badge = document.createElement('span'); badge.className='badge';
+    if(userFw){
+      if(ver===userFw) { badge.textContent='Compatible (coincide)'; badge.classList.add('ok'); }
+      else if(fwCompat.includes(userFw) && fwCompat.includes(ver)) { badge.textContent='Compatible (HFW range)'; badge.classList.add('ok'); }
+      else { badge.textContent='No compatible'; badge.classList.add('danger'); }
+    } else {
+      badge.textContent='Sin detección'; badge.classList.add('warn');
+    }
+
+    left.appendChild(badge);
+    itemEl.appendChild(left);
+    itemEl.appendChild(actions);
+    listEl.appendChild(itemEl);
   });
 }
 
+// Detection logic similar to original
+let detectedFw = null;
+function detectFromUA(){
+  const ua = navigator.userAgent || '';
+  let detected = '—';
+  try{
+    if(ua.includes('PLAYSTATION')){
+      detected = ua.substring(ua.indexOf('5.0 (') + 19, ua.indexOf(') Apple'));
+    } else if(ua.includes('Mozilla') && ua.includes('Apple')){
+      // not PS3 but try a safe extraction
+      const i = ua.indexOf('5.0 (');
+      const j = ua.indexOf(') Apple');
+      if(i!==-1 && j!==-1 && j>i) detected = ua.substring(i+19,j);
+    }
+  }catch(e){detected='—';}
+  if(detected && detected!=='—'){
+    detectedFw = detected;
+    document.getElementById('detected').textContent = detectedFw;
+  } else {
+    detectedFw = null;
+    document.getElementById('detected').textContent = 'No PS3 detectada';
+  }
+  render(document.getElementById('q').value);
+}
+
+// ui
 document.getElementById('q').addEventListener('input', e=> render(e.target.value));
+document.getElementById('detectBtn').addEventListener('click', ()=> detectFromUA());
+
+// initial render
 render();
+
+// run detection automatically (non-intrusive)
+try{detectFromUA();}catch(e){}
 </script>
 </body>
 </html>
