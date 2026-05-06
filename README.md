@@ -6,6 +6,7 @@ Este repositorio aloja un host optimizado para la instalación de PS3 HEN (Homeb
 - **Dashboard Moderno:** Interfaz oscura y minimalista compatible con el navegador antiguo de PS3.
 - **Modo Offline (AppCache):** Tras cargar la página una vez, puedes volver a usarla sin internet. Todo se guarda en la memoria interna de la PS3.
 - **Optimización de Memoria:** Código JavaScript y CSS minificado para reducir el uso de RAM y mejorar la tasa de éxito del exploit (menos cuelgues).
+- **Auto-Reintento Inteligente:** Si el exploit falla por memoria fragmentada, la página se recarga automáticamente hasta 3 veces para asegurar el éxito sin intervención del usuario.
 - **Detección Automática:** Identifica la versión de firmware y resolución de la consola.
 - **Estabilidad Mejorada:** Ejecución manual del exploit para evitar saturación de memoria.
 - **Soporte de Versiones:** Compatible con firmwares HFW desde 4.88 hasta 4.93.
