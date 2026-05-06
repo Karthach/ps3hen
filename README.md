@@ -1,36 +1,49 @@
-# PS3HEN Auto-Instalador Avanzado
+# PS3HEN Auto-Instalador Profesional (v1.2.0)
 
-Este repositorio aloja un host optimizado para la instalación de PS3 HEN (Homebrew Enabler) directamente desde el navegador de la PlayStation 3.
+Este repositorio aloja un host de alto rendimiento y máxima estabilidad para la instalación de **PS3 HEN (Homebrew Enabler)** directamente desde el navegador de la PlayStation 3. Ha sido rediseñado con una arquitectura moderna y resiliente para garantizar el éxito de la instalación incluso en condiciones de memoria crítica.
 
-## Características
-- **Dashboard Moderno:** Interfaz oscura y minimalista compatible con el navegador antiguo de PS3.
-- **Modo Offline (AppCache):** Tras cargar la página una vez, puedes volver a usarla sin internet. Todo se guarda en la memoria interna de la PS3.
-- **Optimización de Memoria:** Código JavaScript y CSS minificado para reducir el uso de RAM y mejorar la tasa de éxito del exploit (menos cuelgues).
-- **Auto-Reintento Inteligente:** Si el exploit falla por memoria fragmentada, la página se recarga automáticamente hasta 3 veces para asegurar el éxito sin intervención del usuario.
-- **Detección Automática:** Identifica la versión de firmware y resolución de la consola.
-- **Estabilidad Mejorada:** Ejecución manual del exploit para evitar saturación de memoria.
-- **Soporte de Versiones:** Compatible con firmwares HFW desde 4.88 hasta 4.93.
+## 🚀 Características Principales
 
-## Estructura del Proyecto
-- index.html: Dashboard principal y detector de sistema.
-- /[versión]/: Carpetas específicas por firmware (ej: 4.93/) que contienen:
-  - index.html: Lógica ROP y lanzador del exploit.
-  - HEN.P3T: Payload de HEN empaquetado como archivo de tema.
-- /hen/: Librerías JavaScript base para el proceso de explotación.
+- **Dashboard por Pestañas:** Interfaz organizada con secciones dedicadas para el **Instalador** y un catálogo de **Aplicaciones**.
+- **Detección Dinámica de HEN:** El sistema detecta automáticamente si HEN ya está activo en tu consola y te ofrece la opción de "Reinstalar" si es necesario.
+- **Modo Offline Total (AppCache):** Tras cargar la página una vez con internet, el host completo se guarda en la memoria interna de la PS3. Puedes habilitar HEN en el futuro **sin conexión a internet**.
+- **Auto-Reintento Inteligente:** Si el exploit falla debido a la fragmentación de la memoria RAM (común en PS3), la página se **recarga automáticamente hasta 3 veces** para buscar un hueco de memoria limpio, eliminando la necesidad de intervención manual.
+- **Arquitectura Unificada (ROP Core):** Lógica de explotación centralizada en un motor único (`rop_core.js`). Esto garantiza una ejecución idéntica y depurada en todas las versiones de firmware.
+- **Optimización Extrema de RAM:** Todo el código JavaScript y CSS está minificado para reducir el consumo de recursos, aumentando drásticamente la tasa de éxito del ROP chain.
+- **Catálogo de Homebrew Imprescindible:** Acceso directo a las versiones oficiales y más estables de herramientas vitales:
+  - **MultiMAN (MOD):** Gestor de archivos y backups.
+  - **Webman Mod:** Control de ventilador y carga rápida.
+  - **IrisMan:** Soporte avanzado para NTFS.
+  - **Apollo Save Tool:** Gestión de partidas guardadas.
+  - **ManaGunZ:** Alternativa potente de backup manager.
+  - **PKGi PS3:** Descarga de contenido directamente en la consola.
 
-## Instrucciones de Uso
-1. Sube estos archivos a un servidor web (GitHub Pages, VPS, etc.).
-2. En tu PS3, abre el navegador y navega a la URL de tu host.
-3. El dashboard detectará tu versión. Pulsa en "Instalar HEN".
-4. En la siguiente página, pulsa "Ejecutar Exploit" y espera a que el proceso termine.
-5. Sigue las instrucciones en pantalla para reiniciar la consola o instalar el archivo .p3t.
+## 📁 Estructura del Proyecto
 
-## Requisitos
-- Tener instalado un Firmware Híbrido (HFW) correspondiente a la versión que intentas instalar.
-- Conexión a internet estable en la consola.
+- `index.html`: Dashboard principal con sistema de pestañas y detección de sistema.
+- `offline.appcache`: Manifiesto para el soporte de uso sin internet.
+- `/[versión]/`: Lógica ROP específica y payloads para cada firmware (4.88 - 4.93).
+- `/hen/`: 
+  - `rop_core.min.js`: El motor central de explotación (unificado y minificado).
+  - `style.min.css`: Estilos visuales optimizados para el navegador NetFront.
 
-## Créditos
-Este proyecto se basa en la investigación y herramientas de la comunidad de PS3Xploit:
+## 🛠️ Instrucciones de Uso
+
+1. **Acceso:** Abre el navegador de tu PS3 y escribe la URL de tu host.
+2. **Sincronización:** Espera unos segundos a que la PS3 guarde la página para el modo offline (verás el indicador de carga del navegador).
+3. **Instalación:** El dashboard detectará tu versión. Pulsa en **"Instalar HEN"**.
+4. **Ejecución:** En la página del exploit, pulsa **"Ejecutar Exploit"**. Si falla, no toques nada; el sistema reintentará solo.
+5. **Finalización:** Una vez descargado el archivo `.P3T`, sigue las instrucciones en pantalla para aplicarlo desde el menú de Temas o el Administrador de PKG.
+
+## 📋 Requisitos
+
+- Consola con **Firmware Híbrido (HFW)** instalado (versiones 4.88 a 4.93 soportadas).
+- Se recomienda limpiar las Cookies y la Caché del navegador antes del primer uso para una tasa de éxito del 100%.
+
+## 🤝 Créditos y Agradecimientos
+
+Este proyecto es una evolución basada en el trabajo incansable de los pioneros de la escena PS3:
 - **Team PS3Xploit:** esc0rtd3w, Joonie, habib, W.
-- **Contribuciones Clave:** xerpi (exploit de memoria), mysis (vsh/lv2), aldostools, zecoxao.
-- **Traducciones:** López Tutoriales.
+- **Desarrolladores Clave:** deank (MultiMAN), aldostools (Webman Mod/IrisMan), bucanero (Apollo/PKGi), Zarh (ManaGunZ).
+- **Investigación:** xerpi, mysis.
+- **Traducciones y Soporte:** López Tutoriales.
