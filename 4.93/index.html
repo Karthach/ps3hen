@@ -87,8 +87,8 @@ function buildXtraData() {
 function initAddresses(xtra_data_addr) {
     flash_partition_addr = xtra_data_addr + 0x6;
     base_file_addr = flash_partition_addr + flash_partition.convertedSize() - 0x4;
-    fs_addr = base_file_addr + base_file.convert().length;
-    mount_path_addr = xtra_data_addr + 0x44;
+    fs_addr = base_file_addr + base_file.convertedSize();
+    mount_path_addr = fs_addr + filesystem.convertedSize();
     
     hen_renamedir_addr1 = xtra_data_addr + 0x5A;
     hen_renamedir_addr2 = xtra_data_addr + 0x96;
@@ -98,7 +98,7 @@ function initAddresses(xtra_data_addr) {
 
 function buildStackFrame() {
     return stack_frame_hookup()
-        + syscall(0x345, flash_partition_addr, 0x8a000000 + 0x158810D, mount_path_addr, 0, 0, 0, 0, 0)
+        + syscall(0x345, flash_partition_addr, fs_addr, mount_path_addr, 0, 0, 0, 0, 0)
         + store_word(0x8a000004 + sf_swap_addr, sp_exit)
         + store_word(0x8a000014 + sf_swap_addr, gadget_mod8_addr)
         + syscall(0x321, base_file_addr, 0x0, 0x8e000000, 0, 0, 0, 0, 0)
