@@ -14,61 +14,103 @@
 <body>
     <div class="container">
         <h1>PS3HEN Dashboard</h1>
-        <p>Bienvenido al instalador avanzado de PS3HEN.</p>
+
+        <div class="tabs-nav">
+            <div class="tab-link active" onclick="openTab('installer')">Instalador</div>
+            <div class="tab-link" onclick="openTab('apps')">Aplicaciones</div>
+        </div>
         
-        <div class="info-box">
-            <div class="info-item">
-                <span class="label">Firmware Detectado:</span><br>
-                <span id="fw-version" class="value">Detectando...</span>
+        <!-- Tab: Installer -->
+        <div id="installer" class="tab-content active">
+            <div class="info-box">
+                <div class="info-item">
+                    <span class="label">Firmware Detectado:</span><br>
+                    <span id="fw-version" class="value">Detectando...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Estado de HEN:</span><br>
+                    <span id="hen-status" class="value">Comprobando...</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Resolución:</span><br>
+                    <span id="screen-res" class="value">...</span>
+                </div>
             </div>
-            <div class="info-item">
-                <span class="label">Navegador:</span><br>
-                <span id="ua-string" class="value">...</span>
-            </div>
-            <div class="info-item">
-                <span class="label">Resolución:</span><br>
-                <span id="screen-res" class="value">...</span>
-            </div>
-            <div class="info-item">
-                <span class="label">Estado de HEN:</span><br>
-                <span id="hen-status" class="value">Comprobando...</span>
+
+            <div id="action-area">
+                <p>Comprobando compatibilidad...</p>
             </div>
         </div>
 
-        <div id="action-area">
-            <p>Comprobando compatibilidad...</p>
-        </div>
+        <!-- Tab: Apps -->
+        <div id="apps" class="tab-content">
+            <h2 style="color:#0081ff; margin-top:10px;">Homebrew Imprescindible</h2>
+            <p style="font-size:0.9em; color:#ccc;">Descarga e instala estas herramientas tras activar HEN:</p>
+            
+            <div class="apps-container">
+                <!-- Fila 1 -->
+                <div class="apps-row">
+                    <div class="app-item">
+                        <span class="app-name">MultiMAN (MOD)</span>
+                        <span class="app-desc">Gestor de archivos y backups (v4.91).</span>
+                        <a href="https://store.brewology.com/get/homebrew.php?id=24&fid=2314" class="btn btn-sm">Descargar</a>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-name">Webman Mod</span>
+                        <span class="app-desc">Control de ventilador y juegos XMB.</span>
+                        <a href="https://github.com/aldostools/webMAN-MOD/releases/download/1.47.48p/webMAN_MOD_1.47.48p_Installer.pkg" class="btn btn-sm">Descargar</a>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-name">IrisMan</span>
+                        <span class="app-desc">Excelente gestor alternativo con soporte NTFS.</span>
+                        <a href="https://store.brewology.com/get/homebrew.php?id=285&fid=2313" class="btn btn-sm">Descargar</a>
+                    </div>
+                </div>
+                <!-- Fila 2 -->
+                <div class="apps-row">
+                    <div class="app-item">
+                        <span class="app-name">Apollo Save Tool</span>
+                        <span class="app-desc">Gestión y parcheo de partidas guardadas.</span>
+                        <a href="https://github.com/bucanero/apollo-ps3/releases/latest/download/apollo-ps3.pkg" class="btn btn-sm">Descargar</a>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-name">ManaGunZ</span>
+                        <span class="app-desc">Backup manager versátil y personalizable.</span>
+                        <a href="https://github.com/Zarh/ManaGunZ/releases/latest/download/ManaGunZ.pkg" class="btn btn-sm">Descargar</a>
+                    </div>
+                    <div class="app-item">
+                        <span class="app-name">PKGi PS3</span>
+                        <span class="app-desc">Descarga contenido directamente en la consola.</span>
+                        <a href="https://github.com/bucanero/pkgi-ps3/releases/latest/download/pkgi-ps3.pkg" class="btn btn-sm">Descargar</a>
+                    </div>
+                </div>
+            </div>
 
-        <h2 style="margin-top:40px; color:#0081ff;">Aplicaciones Imprescindibles</h2>
-        <p>Una vez activado HEN, puedes descargar estas herramientas:</p>
-        
-        <div class="apps-grid">
-            <div class="app-item">
-                <span class="app-name">MultiMAN (MOD)</span>
-                <span class="app-desc">Gestor de archivos y juegos (v4.91 compatibilidad).</span>
-                <a href="https://store.brewology.com/get/homebrew.php?id=24&fid=2314" class="btn btn-sm">Descargar</a>
+            <div class="guide-box">
+                <strong>Guía de Instalación:</strong><br>
+                1. Descarga el archivo PKG (se guardará en el HDD).<br>
+                2. Ve a <strong>Administrar archivos PKG</strong> > <strong>Instalar archivos PKG</strong>.<br>
+                3. Selecciona <strong>Almacenamiento del sistema</strong> e instala tu app.
             </div>
-            <div class="app-item">
-                <span class="app-name">Webman Mod</span>
-                <span class="app-desc">Control de ventilador y juegos (v1.47.48p).</span>
-                <a href="https://github.com/aldostools/webMAN-MOD/releases/download/1.47.48p/webMAN_MOD_1.47.48p_Installer.pkg" class="btn btn-sm">Descargar</a>
-            </div>
-            <div class="app-item">
-                <span class="app-name">Apollo Save Tool</span>
-                <span class="app-desc">Gestión y parcheo de partidas guardadas.</span>
-                <a href="https://github.com/bucanero/apollo-ps3/releases/latest/download/apollo-ps3.pkg" class="btn btn-sm">Descargar</a>
-            </div>
-        </div>
-
-        <div class="guide-box">
-            <strong>¿Cómo instalar?</strong><br>
-            1. Haz clic en Descargar (el navegador de PS3 guardará el archivo).<br>
-            2. Ve al XMB > Administrar archivos PKG > Instalar archivos PKG > Almacenamiento del sistema.<br>
-            3. Selecciona el archivo descargado para instalarlo.
         </div>
     </div>
 
     <script>
+    // Navigation Logic
+    function openTab(tabId) {
+        var contents = document.getElementsByClassName("tab-content");
+        var links = document.getElementsByClassName("tab-link");
+        
+        for (var i = 0; i < contents.length; i++) {
+            contents[i].className = "tab-content";
+            links[i].className = "tab-link";
+        }
+        
+        document.getElementById(tabId).className = "tab-content active";
+        event.currentTarget.className = "tab-link active";
+    }
+
+    // Detection Logic
     var ua = navigator.userAgent;
     var fwVersion = "Desconocido";
     if (ua.indexOf("5.0 (") > -1) {
@@ -76,12 +118,10 @@
     }
     
     document.getElementById("fw-version").innerText = fwVersion;
-    document.getElementById("ua-string").innerText = ua;
     document.getElementById("screen-res").innerText = window.screen.width + "x" + window.screen.height;
 
     var henStatusElem = document.getElementById("hen-status");
     
-    // HEN Detection: Try to access a path that only exists if HEN is active
     var img = new Image();
     img.onload = function() {
         henStatusElem.innerHTML = '<span style="color:#00ff00">ACTIVO</span>';
@@ -91,7 +131,6 @@
         henStatusElem.innerHTML = '<span style="color:#ffcc00">NO DETECTADO</span>';
         updateActionArea(false);
     };
-    // Check for HEN installation folder icon
     img.src = "file:///dev_hdd0/game/HEN000000/icon0.png";
 
     function updateActionArea(henActive) {

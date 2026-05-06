@@ -14,7 +14,33 @@ body {
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
-h1 { color: #0081ff; }
+h1 { color: #0081ff; margin-bottom: 30px; }
+
+/* Tabs Navigation */
+.tabs-nav {
+    display: table;
+    width: 100%;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3d3d3d;
+}
+.tab-link {
+    display: table-cell;
+    padding: 15px;
+    background: #3d3d3d;
+    color: #aaa;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+.tab-link.active {
+    background: #0081ff;
+    color: white;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
 .info-box, .status-box {
     background: #3d3d3d;
     padding: 15px;
@@ -47,10 +73,11 @@ h1 { color: #0081ff; }
 #exploit, #trigger { display: none; }
 
 /* Apps Section */
-.apps-grid {
+.apps-container { padding: 10px 0; }
+.apps-row {
     display: table;
     width: 100%;
-    margin-top: 20px;
+    margin-bottom: 15px;
     border-collapse: separate;
     border-spacing: 10px;
 }
@@ -62,18 +89,22 @@ h1 { color: #0081ff; }
     width: 33%;
     vertical-align: top;
     border: 1px solid #4d4d4d;
+    text-align: center;
 }
 .app-name {
     display: block;
     font-weight: bold;
     color: #0081ff;
     margin-bottom: 5px;
+    font-size: 1.1em;
 }
 .app-desc {
     display: block;
     font-size: 0.8em;
     color: #ccc;
     margin-bottom: 10px;
+    height: 40px;
+    overflow: hidden;
 }
 .btn-sm {
     padding: 8px 15px;
@@ -82,7 +113,7 @@ h1 { color: #0081ff; }
 }
 .guide-box {
     background: #1e3a5f;
-    padding: 10px;
+    padding: 15px;
     border-radius: 5px;
     font-size: 0.85em;
     margin-top: 20px;
