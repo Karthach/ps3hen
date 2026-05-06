@@ -1,0 +1,3 @@
+AddType text/cache-manifest .appcache
+AddType application/octet-stream .p3t
+AddType application/octet-stream .P3T

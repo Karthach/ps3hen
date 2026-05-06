@@ -3,10 +3,12 @@
 Este repositorio aloja un host optimizado para la instalación de PS3 HEN (Homebrew Enabler) directamente desde el navegador de la PlayStation 3.
 
 ## Características
-- Dashboard Moderno: Interfaz oscura y minimalista compatible con el navegador antiguo de PS3.
-- Detección Automática: Identifica la versión de firmware y resolución de la consola.
-- Estabilidad Mejorada: Ejecución manual del exploit mediante botón para evitar bloqueos (freezes) de memoria.
-- Soporte de Versiones: Compatible con firmwares HFW desde 4.88 hasta 4.93.
+- **Dashboard Moderno:** Interfaz oscura y minimalista compatible con el navegador antiguo de PS3.
+- **Modo Offline (AppCache):** Tras cargar la página una vez, puedes volver a usarla sin internet. Todo se guarda en la memoria interna de la PS3.
+- **Optimización de Memoria:** Código JavaScript y CSS minificado para reducir el uso de RAM y mejorar la tasa de éxito del exploit (menos cuelgues).
+- **Detección Automática:** Identifica la versión de firmware y resolución de la consola.
+- **Estabilidad Mejorada:** Ejecución manual del exploit para evitar saturación de memoria.
+- **Soporte de Versiones:** Compatible con firmwares HFW desde 4.88 hasta 4.93.
 
 ## Estructura del Proyecto
 - index.html: Dashboard principal y detector de sistema.

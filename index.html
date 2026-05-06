@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest="offline.appcache">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0">
@@ -9,7 +9,7 @@
     <meta http-equiv="pragma" content="no-cache">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PS3HEN Dashboard</title>
-    <link rel="stylesheet" href="hen/style.css">
+    <link rel="stylesheet" href="hen/style.min.css">
 </head>
 <body>
     <div class="container">
@@ -36,26 +36,7 @@
         </div>
     </div>
 
-    <script>
-        var ua = navigator.userAgent;
-        var fwVersion = "Desconocido";
-        
-        if (ua.indexOf("5.0 (") > -1) {
-            fwVersion = ua.substring(ua.indexOf("5.0 (") + 19, ua.indexOf(") Apple"));
-        }
-
-        document.getElementById('fw-version').innerText = fwVersion;
-        document.getElementById('ua-string').innerText = ua;
-        document.getElementById('screen-res').innerText = window.screen.width + "x" + window.screen.height;
-
-        var supportedVersions = ["4.88", "4.89", "4.90", "4.91", "4.92", "4.93"];
-        var actionArea = document.getElementById('action-area');
-
-        if (supportedVersions.indexOf(fwVersion) > -1) {
-            actionArea.innerHTML = '<a href="./' + fwVersion + '/index.html" class="btn">Instalar HEN ' + fwVersion + '</a>';
-        } else {
-            actionArea.innerHTML = '<p class="unsupported">Versión ' + fwVersion + ' no soportada directamente.<br>Por favor, asegúrate de estar en un Firmware Híbrido (HFW).</p>';
-        }
-    </script>
+    <script>var ua=navigator.userAgent,fwVersion="Desconocido";ua.indexOf("5.0 (")>-1&&(fwVersion=ua.substring(ua.indexOf("5.0 (")+19,ua.indexOf(") Apple"))),document.getElementById("fw-version").innerText=fwVersion,document.getElementById("ua-string").innerText=ua,document.getElementById("screen-res").innerText=window.screen.width+"x"+window.screen.height;var supportedVersions=["4.88","4.89","4.90","4.91","4.92","4.93"],actionArea=document.getElementById("action-area");supportedVersions.indexOf(fwVersion)>-1?actionArea.innerHTML='<a href="./'+fwVersion+'/index.html" class="btn">Instalar HEN '+fwVersion+"</a>":actionArea.innerHTML='<p class="unsupported">Versión '+fwVersion+" no soportada directamente.<br>Por favor, asegúrate de estar en un Firmware Híbrido (HFW).</p>";
+</script>
 </body>
 </html>
