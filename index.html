@@ -34,6 +34,34 @@
         <div id="action-area">
             <p>Comprobando compatibilidad...</p>
         </div>
+
+        <h2 style="margin-top:40px; color:#0081ff;">Aplicaciones Imprescindibles</h2>
+        <p>Una vez activado HEN, puedes descargar estas herramientas:</p>
+        
+        <div class="apps-grid">
+            <div class="app-item">
+                <span class="app-name">MultiMAN</span>
+                <span class="app-desc">Gestor de archivos, juegos y backups.</span>
+                <a href="https://store.brewology.com/get/homebrew.php?id=24&fid=2125" class="btn btn-sm">Descargar</a>
+            </div>
+            <div class="app-item">
+                <span class="app-name">Webman Mod</span>
+                <span class="app-desc">Control de ventilador y juegos desde XMB.</span>
+                <a href="https://github.com/aldostools/webMAN-MOD/releases/latest/download/webMAN_MOD_1.47.46_Installer.pkg" class="btn btn-sm">Descargar</a>
+            </div>
+            <div class="app-item">
+                <span class="app-name">Apollo Save Tool</span>
+                <span class="app-desc">Gestión y parcheo de partidas guardadas.</span>
+                <a href="https://github.com/bucanero/apollo-save-tool/releases/latest/download/Apollo-Save-Tool-PS3.pkg" class="btn btn-sm">Descargar</a>
+            </div>
+        </div>
+
+        <div class="guide-box">
+            <strong>¿Cómo instalar?</strong><br>
+            1. Haz clic en Descargar (el navegador de PS3 guardará el archivo).<br>
+            2. Ve al XMB > Administrar archivos PKG > Instalar archivos PKG > Almacenamiento del sistema.<br>
+            3. Selecciona el archivo descargado para instalarlo.
+        </div>
     </div>
 
     <script>var ua=navigator.userAgent,fwVersion="Desconocido";ua.indexOf("5.0 (")>-1&&(fwVersion=ua.substring(ua.indexOf("5.0 (")+19,ua.indexOf(") Apple"))),document.getElementById("fw-version").innerText=fwVersion,document.getElementById("ua-string").innerText=ua,document.getElementById("screen-res").innerText=window.screen.width+"x"+window.screen.height;var supportedVersions=["4.88","4.89","4.90","4.91","4.92","4.93"],actionArea=document.getElementById("action-area");supportedVersions.indexOf(fwVersion)>-1?actionArea.innerHTML='<a href="./'+fwVersion+'/index.html" class="btn">Instalar HEN '+fwVersion+"</a>":actionArea.innerHTML='<p class="unsupported">Versión '+fwVersion+" no soportada directamente.<br>Por favor, asegúrate de estar en un Firmware Híbrido (HFW).</p>";

@@ -45,3 +45,47 @@ h1 { color: #0081ff; }
 .btn:hover { background: #005bb5; }
 .unsupported { color: #ff4444; font-weight: bold; }
 #exploit, #trigger { display: none; }
+
+/* Apps Section */
+.apps-grid {
+    display: table;
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+.app-item {
+    display: table-cell;
+    background: #3d3d3d;
+    padding: 15px;
+    border-radius: 8px;
+    width: 33%;
+    vertical-align: top;
+    border: 1px solid #4d4d4d;
+}
+.app-name {
+    display: block;
+    font-weight: bold;
+    color: #0081ff;
+    margin-bottom: 5px;
+}
+.app-desc {
+    display: block;
+    font-size: 0.8em;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+.btn-sm {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.guide-box {
+    background: #1e3a5f;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    margin-top: 20px;
+    text-align: left;
+    border-left: 4px solid #0081ff;
+}
