@@ -1,0 +1,79 @@
+name: Build and Release HEN
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag para crear release (ej. v3.4.0)'
+        required: false
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Determine version
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            VERSION="${{ github.event.inputs.tag }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/}"
+          fi
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Package hen directory
+        run: |
+          set -e
+          PKG=ps3hen-${VERSION}.zip
+          rm -f "$PKG" "$PKG.sha256"
+          if [ -d hen ]; then
+            zip -r "$PKG" hen || true
+          else
+            echo "No existe carpeta hen, nada que empaquetar" && exit 1
+          fi
+          sha256sum "$PKG" | awk '{print $1}' > "$PKG.sha256"
+          ls -lh "$PKG" "$PKG.sha256"
+        env:
+          VERSION: ${{ env.VERSION }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: "PS3HEN ${{ env.VERSION }}"
+          body: "Release automática: paquete y checksum generados por CI."
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload package asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ps3hen-${{ env.VERSION }}.zip
+          asset_name: ps3hen-${{ env.VERSION }}.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload checksum
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ps3hen-${{ env.VERSION }}.zip.sha256
+          asset_name: ps3hen-${{ env.VERSION }}.zip.sha256
+          asset_content_type: text/plain
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output release info
+        run: |
+          echo "Release creada: ${{ env.VERSION }}"
+          echo "Assets subidos: ps3hen-${{ env.VERSION }}.zip and .sha256"

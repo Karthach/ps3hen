@@ -1,0 +1,28 @@
+name: Generar RELEASES.json
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Generar RELEASES.json
+        run: |
+          set -e
+          shopt -s globstar || true
+          ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo '{"generated_at":"'"$ts"'","files":[' > RELEASES.json
+          first=true
+          for f in hen/** ; do
+            if [ -f "$f" ]; then
+              hash=$(sha256sum "$f" | cut -d' ' -f1)
+              if [ "$first" = true ]; then first=false; else echo ',' >> RELEASES.json; fi
+              printf '{"path":"%s","sha256":"%s"}' "$f" "$hash" >> RELEASES.json
+            fi
+          done
+          echo ']}' >> RELEASES.json
+      - name: Show RELEASES.json
+        run: cat RELEASES.json
