@@ -29,6 +29,10 @@
                 <span class="label">Resolución:</span><br>
                 <span id="screen-res" class="value">...</span>
             </div>
+            <div class="info-item">
+                <span class="label">Estado de HEN:</span><br>
+                <span id="hen-status" class="value">Comprobando...</span>
+            </div>
         </div>
 
         <div id="action-area">
@@ -64,7 +68,44 @@
         </div>
     </div>
 
-    <script>var ua=navigator.userAgent,fwVersion="Desconocido";ua.indexOf("5.0 (")>-1&&(fwVersion=ua.substring(ua.indexOf("5.0 (")+19,ua.indexOf(") Apple"))),document.getElementById("fw-version").innerText=fwVersion,document.getElementById("ua-string").innerText=ua,document.getElementById("screen-res").innerText=window.screen.width+"x"+window.screen.height;var supportedVersions=["4.88","4.89","4.90","4.91","4.92","4.93"],actionArea=document.getElementById("action-area");supportedVersions.indexOf(fwVersion)>-1?actionArea.innerHTML='<a href="./'+fwVersion+'/index.html" class="btn">Instalar HEN '+fwVersion+"</a>":actionArea.innerHTML='<p class="unsupported">Versión '+fwVersion+" no soportada directamente.<br>Por favor, asegúrate de estar en un Firmware Híbrido (HFW).</p>";
-</script>
+    <script>
+    var ua = navigator.userAgent;
+    var fwVersion = "Desconocido";
+    if (ua.indexOf("5.0 (") > -1) {
+        fwVersion = ua.substring(ua.indexOf("5.0 (") + 19, ua.indexOf(") Apple"));
+    }
+    
+    document.getElementById("fw-version").innerText = fwVersion;
+    document.getElementById("ua-string").innerText = ua;
+    document.getElementById("screen-res").innerText = window.screen.width + "x" + window.screen.height;
+
+    var henStatusElem = document.getElementById("hen-status");
+    
+    // HEN Detection: Try to access a path that only exists if HEN is active
+    var img = new Image();
+    img.onload = function() {
+        henStatusElem.innerHTML = '<span style="color:#00ff00">ACTIVO</span>';
+        updateActionArea(true);
+    };
+    img.onerror = function() {
+        henStatusElem.innerHTML = '<span style="color:#ffcc00">NO DETECTADO</span>';
+        updateActionArea(false);
+    };
+    // Check for HEN installation folder icon
+    img.src = "file:///dev_hdd0/game/HEN000000/icon0.png";
+
+    function updateActionArea(henActive) {
+        var supportedVersions = ["4.88", "4.89", "4.90", "4.91", "4.92", "4.93"];
+        var actionArea = document.getElementById("action-area");
+        
+        if (supportedVersions.indexOf(fwVersion) > -1) {
+            var btnText = henActive ? "Reinstalar HEN " + fwVersion : "Instalar HEN " + fwVersion;
+            var infoMsg = henActive ? "<p style='color:#ccc; font-size:0.9em; margin-bottom:10px;'>HEN ya parece estar activo, pero puedes reinstalarlo si lo necesitas.</p>" : "";
+            actionArea.innerHTML = infoMsg + '<a href="./' + fwVersion + '/index.html" class="btn">' + btnText + '</a>';
+        } else {
+            actionArea.innerHTML = '<p class="unsupported">Versión ' + fwVersion + ' no soportada directamente.<br>Por favor, asegúrate de estar en un Firmware Híbrido (HFW).</p>';
+        }
+    }
+    </script>
 </body>
 </html>
