@@ -4,47 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instalador HEN 4.93</title>
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #2d2d2d;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-        }
-        h1 { color: #0081ff; }
-        .status-box {
-            background: #3d3d3d;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            min-height: 50px;
-        }
-        .btn {
-            display: inline-block;
-            background: #0081ff;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 20px;
-            cursor: pointer;
-            border: none;
-        }
-        .btn:hover { background: #005bb5; }
-        #exploit { display: none; }
-        #trigger { display: none; }
-    </style>
+    <link rel="stylesheet" href="../hen/style.css">
 </head>
 <body>
     <div class="container">
@@ -112,6 +72,6 @@ function buildStackFrame() {
         + stack_frame_exit();
 }
 </script>
-<script src="../hen/rop_core.min.js"></script>
+<script src="../hen/rop_core.js"></script>
 </body>
 </html>

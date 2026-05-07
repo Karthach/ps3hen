@@ -287,9 +287,14 @@ function HFWmsg() {
 
 function startExploit() {
     document.getElementById("run-btn").style.display = "none";
-    if (fwv == firmware_version) {
-        initROP(true);
-    } else {
-        HFWmsg();
-    }
+    showMsg("<h2>Preparando memoria...</h2>");
+    
+    // Performance Tweak: Give browser time to stabilize and run GC
+    setTimeout(function() {
+        if (fwv == firmware_version) {
+            initROP(true);
+        } else {
+            HFWmsg();
+        }
+    }, 800);
 }
